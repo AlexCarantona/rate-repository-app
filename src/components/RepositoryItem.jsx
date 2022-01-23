@@ -21,6 +21,8 @@ const MicroData = ({number, label}) => {
 
 const RepositoryItem = (item) => {
 
+    const i = item.node
+
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -61,21 +63,21 @@ const RepositoryItem = (item) => {
             <View style={styles.upper}>
                 <Image 
                     style={styles.image} 
-                    source={{ uri: item.ownerAvatarUrl}} 
+                    source={{ uri: i.ownerAvatarUrl}} 
                 />
                 <View style={styles.upperData}>
-                    <Text fontSize='heading' fontWeight='bold' style={{padding: 4}}>{item.fullName}</Text>
+                    <Text fontSize='heading' fontWeight='bold' style={{padding: 4}}>{i.fullName}</Text>
                     <View style={{flexDirection: 'row' }}>
-                        <Text color='textSecondary' style={{ flex: 1, flexWrap: 'wrap'}}>{item.description}</Text>
+                        <Text color='textSecondary' style={{ flex: 1, flexWrap: 'wrap'}}>{i.description}</Text>
                     </View>
-                    <Text style={styles.tag}>{item.language}</Text>
+                    <Text style={styles.tag}>{i.language}</Text>
                 </View>
             </View>
             <View style={styles.variableData}>
-                <MicroData number={item.stargazersCount} label='Stars' />
-                <MicroData number={item.forksCount} label='Forks' />
-                <MicroData number={item.reviewCount} label='Reviews' />
-                <MicroData number={item.ratingAverage} label='Rating' />
+                <MicroData number={i.stargazersCount} label='Stars' />
+                <MicroData number={i.forksCount} label='Forks' />
+                <MicroData number={i.reviews.totalCount} label='Reviews' />
+                <MicroData number={i.ratingAverage} label='Rating' />
             </View>
         </View>
     )
