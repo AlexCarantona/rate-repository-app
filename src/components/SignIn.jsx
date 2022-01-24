@@ -4,6 +4,7 @@ import FormikTextInput from './formikTextInput';
 import CustomButton from './CustomButton';
 import * as yup from 'yup';
 import useSignIn from '../../hooks/useSignIn';
+import AuthStorage from '../utils/authStorage';
 
 const validationSchema = yup.object().shape({
   username: yup.string().required('You must enter a valid username.'),
@@ -33,7 +34,8 @@ const SignIn = () => {
     const { username, password } = values 
     try {
      const { data } = await signin({username, password})
-     console.log(data)
+     const authenticator = new AuthStorage;
+     await authenticator.setAccessToken(data.authenticate.accessToken)
     } catch (e){ console.log(e)}
   }
 
