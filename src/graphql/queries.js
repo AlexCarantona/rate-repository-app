@@ -21,3 +21,12 @@ export const GET_REPOS = gql`
         }
   }
 `
+
+export const ME = gql`
+    query Me {
+        me {
+            id
+            username
+        }
+    }
+`
