@@ -21,8 +21,6 @@ const MicroData = ({number, label}) => {
 
 const RepositoryItem = (item) => {
 
-    const i = item.node
-
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -59,25 +57,25 @@ const RepositoryItem = (item) => {
     })
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} testID="repoItem">
             <View style={styles.upper}>
                 <Image 
                     style={styles.image} 
-                    source={{ uri: i.ownerAvatarUrl}} 
+                    source={{ uri: item.ownerAvatarUrl}} 
                 />
                 <View style={styles.upperData}>
-                    <Text fontSize='heading' fontWeight='bold' style={{padding: 4}}>{i.fullName}</Text>
+                    <Text fontSize='heading' fontWeight='bold' style={{padding: 4}}>{item.fullName}</Text>
                     <View style={{flexDirection: 'row' }}>
-                        <Text color='textSecondary' style={{ flex: 1, flexWrap: 'wrap'}}>{i.description}</Text>
+                        <Text color='textSecondary' style={{ flex: 1, flexWrap: 'wrap'}}>{item.description}</Text>
                     </View>
-                    <Text style={styles.tag}>{i.language}</Text>
+                    <Text style={styles.tag}>{item.language}</Text>
                 </View>
             </View>
             <View style={styles.variableData}>
-                <MicroData number={i.stargazersCount} label='Stars' />
-                <MicroData number={i.forksCount} label='Forks' />
-                <MicroData number={i.reviews.totalCount} label='Reviews' />
-                <MicroData number={i.ratingAverage} label='Rating' />
+                <MicroData number={item.stargazersCount} label='Stars' />
+                <MicroData number={item.forksCount} label='Forks' />
+                <MicroData number={item.reviews.totalCount} label='Reviews' />
+                <MicroData number={item.ratingAverage} label='Rating' />
             </View>
         </View>
     )
