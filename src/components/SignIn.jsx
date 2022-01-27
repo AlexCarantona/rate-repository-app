@@ -6,26 +6,26 @@ import * as yup from 'yup';
 import useSignIn from '../hooks/useSignIn';
 import { useNavigate } from 'react-router-native';
 
-const validationSchema = yup.object().shape({
-  username: yup.string().required('You must enter a valid username.'),
-  password: yup.string().required('You must provide a password to login.')
-})
 
-
-const SignInForm = ({ onSubmit }) => {
+export const SignInForm = ({ onSubmit }) => {
+    
+    const validationSchema = yup.object().shape({
+      username: yup.string().required('You must enter a valid username.'),
+      password: yup.string().required('You must provide a password to login.')
+    })
   return (
-    <View>
-      <FormikTextInput name='username' placeholder='Username...' />
-      <FormikTextInput secureTextEntry name='password' placeholder='Password...' />
-      <CustomButton onPress={onSubmit} label='Log in' />
-    </View>
+    <Formik initialValues={{username: '', password:''}} onSubmit={onSubmit} validationSchema={validationSchema} >
+    {({ handleSubmit }) =>
+      <View>
+        <FormikTextInput name='username' placeholder='Username...' />
+        <FormikTextInput secureTextEntry name='password' placeholder='Password...' />
+        <CustomButton onPress={handleSubmit} label='Log in' />
+      </View>
+    }
+    </Formik>
   )
 }
 
-const initialValues= {
-  username: '',
-  password:''
-}
 
 const SignIn = () => {
   const navigate = useNavigate()
@@ -40,8 +40,8 @@ const SignIn = () => {
   }
 
   return (
-  <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-    {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit}/> }
-  </Formik>)};
+    <SignInForm onSubmit={onSubmit} />
+    )
+  };
 
 export default SignIn;
