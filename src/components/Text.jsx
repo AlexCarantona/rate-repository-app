@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSizes.body,
     fontFamily: theme.fonts.main,
     fontWeight: theme.fontWeights.normal,
+    padding: 5,
   },
   colorTextPrimary: {
     color: theme.colors.textPrimary,

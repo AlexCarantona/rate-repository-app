@@ -6,6 +6,7 @@ export const GET_REPOS = gql`
         edges {
             node {
                 id
+                fullName
                 ratingAverage
                 reviewCount
                 stargazersCount
@@ -16,16 +17,17 @@ export const GET_REPOS = gql`
                 description
                 reviews {
                     totalCount
-            }
+                }
             }
         }
-        }
-  }
+    }
+    }
 `
 
 export const GET_REPO = gql`
   query Repository($id: ID!) {
       repository(id: $id) {
+          fullName
           ratingAverage
           reviewCount
           stargazersCount
@@ -34,10 +36,21 @@ export const GET_REPO = gql`
           forksCount
           language
           description
+          url
           reviews {
               totalCount
-          }
-          url
+                  edges{
+                      node{
+                          id
+                          text
+                          rating
+                          createdAt
+                          user {
+                              username
+                          }
+                      }
+                }
+            }
       }
   }
 `

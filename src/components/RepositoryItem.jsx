@@ -1,10 +1,12 @@
 import { useQuery } from "@apollo/client";
-import { Button, Image, StyleSheet, View } from "react-native";
+import { Button, FlatList, Image, StyleSheet, View } from "react-native";
 import { useParams } from "react-router-native";
 import { GET_REPO } from "../graphql/queries";
 import { openURL } from "expo-linking";
 import theme from "../theme";
 import Text from "./Text";
+import { ItemSeparator } from "./RepositoryList";
+import { format } from "date-fns";
 
 const MicroData = ({number, label}) => {
 
@@ -23,12 +25,64 @@ const MicroData = ({number, label}) => {
     )
 };
 
-const RepositoryItem = (props) => {
+const ReviewItem = ({ item }) => {
 
+    const styles = StyleSheet.create({
+        reviewContainer: {
+            flexDirection: "row",
+            marginTop: 3
+        },
+        rating : {
+            height: 40,
+            width: 40,
+            borderRadius: 20,
+            borderWidth: 2,
+            borderColor: theme.colors.primary,
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 5,
+            margin: 3
+        },
+        reviewInfo: {
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            marginRight: 4,
+            flex: 1
+        }
+    })
+
+
+    return (
+    <View style={styles.reviewContainer} fullWidth> 
+        <View style={styles.rating}><Text fontSize='subheading' fontWeight='bold' color='primary'>{item.rating}</Text></View>
+        <View style={styles.reviewInfo} >
+            <Text fontSize='subheading' fontWeight='bold'>{item.user.username}</Text>
+            <Text>{format(new Date(item.createdAt), 'y.M.d')}</Text>
+            <Text>{item.text}</Text>
+        </View>
+    </View>
+    )
+}
+
+export const ReviewedRepo = () => {
     const { id } = useParams()
-
     const it = useQuery(GET_REPO, {variables: { id }});
 
+    if (it.loading) return <View><Text>{'Loading...'}</Text></View>;
+
+    const reviews = it.data.repository.reviews?.edges.map(rev => rev.node)
+
+    return (<FlatList
+        data={reviews}
+        renderItem={({item}) => <ReviewItem item={item} />}
+        keyExtractor={({ id}) => id}
+        ItemSeparatorComponent={ItemSeparator}
+        ListHeaderComponent={() => <RepositoryItem item={it.data.repository} />}
+        />
+    )
+}
+
+const RepositoryItem = ({ item }) => {
     
     const styles = StyleSheet.create({
         container: {
@@ -64,10 +118,6 @@ const RepositoryItem = (props) => {
             color: 'white'
         }
     })
-    
-    if (it.loading) return <View style={styles.container}><Text>{'Loading...'}</Text></View>;
-
-    const item = props.item ? props.item : it.data.repository;
     
     return (
         <View style={styles.container} testID="repoItem" key={item.id}>
