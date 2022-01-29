@@ -1,4 +1,8 @@
-import { Image, StyleSheet, View } from "react-native";
+import { useQuery } from "@apollo/client";
+import { Button, Image, StyleSheet, View } from "react-native";
+import { useParams } from "react-router-native";
+import { GET_REPO } from "../graphql/queries";
+import { openURL } from "expo-linking";
 import theme from "../theme";
 import Text from "./Text";
 
@@ -19,8 +23,13 @@ const MicroData = ({number, label}) => {
     )
 };
 
-const RepositoryItem = (item) => {
+const RepositoryItem = (props) => {
 
+    const { id } = useParams()
+
+    const it = useQuery(GET_REPO, {variables: { id }});
+
+    
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -55,9 +64,13 @@ const RepositoryItem = (item) => {
             color: 'white'
         }
     })
+    
+    if (it.loading) return <View style={styles.container}><Text>{'Loading...'}</Text></View>;
 
+    const item = props.item ? props.item : it.data.repository;
+    
     return (
-        <View style={styles.container} testID="repoItem">
+        <View style={styles.container} testID="repoItem" key={item.id}>
             <View style={styles.upper}>
                 <Image 
                     style={styles.image} 
@@ -74,9 +87,10 @@ const RepositoryItem = (item) => {
             <View style={styles.variableData}>
                 <MicroData number={item.stargazersCount} label='Stars' />
                 <MicroData number={item.forksCount} label='Forks' />
-                <MicroData number={item.reviews.totalCount} label='Reviews' />
+                <MicroData number={item.reviews?.totalCount} label='Reviews' />
                 <MicroData number={item.ratingAverage} label='Rating' />
             </View>
+            {item.url && <Button title="Open in GitHub" onPress={(e) => { e.preventDefault; openURL(item.url) }}/>}
         </View>
     )
 

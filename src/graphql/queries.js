@@ -5,20 +5,40 @@ export const GET_REPOS = gql`
         repositories {
         edges {
             node {
-            ratingAverage
-            reviewCount
-            stargazersCount
-            name
-            ownerAvatarUrl
-            forksCount
-            language
-            description
-            reviews {
-                totalCount
+                id
+                ratingAverage
+                reviewCount
+                stargazersCount
+                name
+                ownerAvatarUrl
+                forksCount
+                language
+                description
+                reviews {
+                    totalCount
             }
             }
         }
         }
+  }
+`
+
+export const GET_REPO = gql`
+  query Repository($id: ID!) {
+      repository(id: $id) {
+          ratingAverage
+          reviewCount
+          stargazersCount
+          name
+          ownerAvatarUrl
+          forksCount
+          language
+          description
+          reviews {
+              totalCount
+          }
+          url
+      }
   }
 `
 
