@@ -14,7 +14,7 @@ const ReviewForm = ({ onSubmit }) => {
             <FormikTextInput name='repoOwner' placeholder='Repository owner...' />
             <FormikTextInput name='repoName' placeholder='Repository name...' />
             <FormikTextInput name='rating' placeholder='Rating from 0 to 100...' />
-            <FormikTextInput name='reviewText' placeholder='Your review...' />
+            <FormikTextInput multiline={true} name='reviewText' placeholder='Your review...' />
             <CustomButton onPress={onSubmit} label='Submit review' />
         </View>
     )

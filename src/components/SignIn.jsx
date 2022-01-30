@@ -18,7 +18,7 @@ export const SignInForm = ({ onSubmit }) => {
     {({ handleSubmit }) =>
       <View>
         <FormikTextInput name='username' placeholder='Username...' />
-        <FormikTextInput secureTextEntry name='password' placeholder='Password...' />
+        <FormikTextInput secureTextEntry={true} name='password' placeholder='Password...' />
         <CustomButton onPress={handleSubmit} label='Log in' />
       </View>
     }

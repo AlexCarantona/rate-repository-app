@@ -1,5 +1,5 @@
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { Link } from 'react-router-native';
+import { Link, useNavigate } from 'react-router-native';
 import Text from './Text';
 import Constants from 'expo-constants';
 import theme from '../theme';
@@ -31,6 +31,7 @@ const AppTab = ({text, link}) =>
 const AppBar = () => {
   const authstorage = useAuthStorage()
   const client = useApolloClient()
+  const navigate = useNavigate()
   const { data, loading, error } = useQuery(ME)
   if (loading) return (<Text>Cargando...</Text>);
   if (error) console.log(error)
@@ -41,12 +42,16 @@ const AppBar = () => {
         <AppTab text='Repositories' link='/'/>
         {data.me !== null ?
         <View style={{flexDirection: 'row'}}>
-         <Pressable style={styles.tab} onPressOut={() => {authstorage.removeAccessToken(); client.resetStore()}}>
+         <Pressable style={styles.tab} onPressOut={() => {authstorage.removeAccessToken(); client.resetStore(); navigate('/')}}>
            <Text color='nav' fontSize='heading'>Sign Out</Text>
           </Pressable> 
           <AppTab text='Create review' link='/review' />
           </View>
-          : <AppTab text='Sign In' link='/signin'/>}
+          : 
+          <View style={{flexDirection: 'row'}}>
+            <AppTab text='Sign In' link='/signin'/> 
+            <AppTab text='Sign Up' link='/signup'/>
+          </View>}
       </ScrollView>
       </View>;
 };
