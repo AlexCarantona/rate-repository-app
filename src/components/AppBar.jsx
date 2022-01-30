@@ -23,9 +23,10 @@ const styles = StyleSheet.create({
 });
 
 const AppTab = ({text, link}) => 
-  <Link to={link} style={styles.tab}>
+  {
+  return (<Link to={link} style={styles.tab}>
     <Text color="nav" fontSize='heading'>{text}</Text> 
-  </Link>;
+  </Link>)};
 
 const AppBar = () => {
   const authstorage = useAuthStorage()
@@ -38,7 +39,14 @@ const AppBar = () => {
   return <View style={styles.container}>
       <ScrollView horizontal style={styles.scroller}>
         <AppTab text='Repositories' link='/'/>
-        {data.me !== null ? <Pressable onPressOut={() => {authstorage.removeAccessToken(); client.resetStore()}}><Text color='primary'>Sign Out</Text></Pressable> : <AppTab text='Sign In' link='/signin'/>}
+        {data.me !== null ?
+        <View style={{flexDirection: 'row'}}>
+         <Pressable style={styles.tab} onPressOut={() => {authstorage.removeAccessToken(); client.resetStore()}}>
+           <Text color='nav' fontSize='heading'>Sign Out</Text>
+          </Pressable> 
+          <AppTab text='Create review' link='/review' />
+          </View>
+          : <AppTab text='Sign In' link='/signin'/>}
       </ScrollView>
       </View>;
 };

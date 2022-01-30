@@ -1,11 +1,9 @@
-import { TextInput as NativeTextInput, StyleSheet } from 'react-native';
+import { TextInput as NativeTextInput } from 'react-native';
 
-const styles = StyleSheet.create({});
-
-const TextInput = ({ style, error, ...props }) => {
+const TextInput = ({ style, ...props }) => {
   const textInputStyle = [style];
 
-  return <NativeTextInput style={textInputStyle} {...props} />;
+  return <NativeTextInput style={textInputStyle} multiline={true} textAlignVertical='top' {...props} />;
 };
 
 export default TextInput;

@@ -66,7 +66,7 @@ const ReviewItem = ({ item }) => {
 
 export const ReviewedRepo = () => {
     const { id } = useParams()
-    const it = useQuery(GET_REPO, {variables: { id }});
+    const it = useQuery(GET_REPO, {fetchPolicy: 'cache-and-network', variables: { id }});
 
     if (it.loading) return <View><Text>{'Loading...'}</Text></View>;
 
