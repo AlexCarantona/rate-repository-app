@@ -5,7 +5,6 @@ import { GET_REPO } from "../graphql/queries";
 import { openURL } from "expo-linking";
 import theme from "../theme";
 import Text from "./Text";
-import { ItemSeparator } from "./RepositoryList";
 import { format } from "date-fns";
 
 const MicroData = ({number, label}) => {
@@ -66,18 +65,32 @@ const ReviewItem = ({ item }) => {
 
 export const ReviewedRepo = () => {
     const { id } = useParams()
-    const it = useQuery(GET_REPO, {fetchPolicy: 'cache-and-network', variables: { id }});
+    const { data, loading, fetchMore } = useQuery(GET_REPO, {
+        fetchPolicy: 'cache-and-network', 
+        variables: { id }
+    });
 
-    if (it.loading) return <View><Text>{'Loading...'}</Text></View>;
+    if (loading) return <View><Text>{'Loading...'}</Text></View>;
 
-    const reviews = it.data.repository.reviews?.edges.map(rev => rev.node)
+    const reviews = data.repository.reviews?.edges.map(rev => rev.node)
+
+    const handleMore = () => {
+
+        if (!loading && data?.repository.reviews.pageInfo.hasNextPage)
+            fetchMore({
+                variables: {
+                after: data.repository.reviews.pageInfo.endCursor,
+                id
+                }
+            })
+    }
 
     return (<FlatList
         data={reviews}
         renderItem={({item}) => <ReviewItem item={item} />}
         keyExtractor={({ id}) => id}
-        ItemSeparatorComponent={ItemSeparator}
-        ListHeaderComponent={() => <RepositoryItem item={it.data.repository} />}
+        onEndReached={handleMore}
+        ListHeaderComponent={() => <RepositoryItem item={data.repository} />}
         />
     )
 }

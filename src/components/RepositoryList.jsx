@@ -12,13 +12,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export const ItemSeparator = () => <View style={styles.separator} />;
+const ItemSeparator = () => <View style={styles.separator} />;
 
-const criteriaPicker = ({ criteria, setCriteria, searchString, setString}) =>{
+const criteriaPicker = ({ criteria, setCriteria, searchKeyword, setSearchKeyword }) =>{
 
   return (
     <View>
-      <Searchbar onChangeText={setString} value={searchString} />
+      <Searchbar onChangeText={setSearchKeyword} value={searchKeyword} />
     <Picker
       selectedValue={criteria}
       onValueChange= {(itemValue) => setCriteria(itemValue)}
@@ -34,9 +34,9 @@ const criteriaPicker = ({ criteria, setCriteria, searchString, setString}) =>{
 const RepositoryList = () => {
 
   const [criteria, setCriteria] = useState('created')
-  const [searchString, setString] = useState('')
+  const [searchKeyword, setSearchKeyword] = useState('')
   
-  const {repositories} = useRepositories(criteria, searchString)
+  const {repositories, fetchMore} = useRepositories(criteria, searchKeyword)
 
   const navigate = useNavigate()
   
@@ -45,11 +45,16 @@ const RepositoryList = () => {
   ? repositories.edges.map((edge) => edge.node) :
   []
 
+  const onEndReached = () => {
+    fetchMore()
+  }
+
 return (
   <FlatList
     data={repoNodes}
     ItemSeparatorComponent={ItemSeparator}
-    ListHeaderComponent={criteriaPicker({ criteria, setCriteria, searchString, setString })}
+    ListHeaderComponent={criteriaPicker({ criteria, setCriteria, searchKeyword, setSearchKeyword })}
+    onEndReached={onEndReached}
     renderItem={({item}) => (
     <Pressable onPress={(e) => {e.preventDefault(); navigate(`/${item.id}`)}}> 
       <RepositoryItem item={item} /> 
