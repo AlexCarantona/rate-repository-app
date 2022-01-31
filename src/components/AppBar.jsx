@@ -35,7 +35,6 @@ const AppBar = () => {
   const { data, loading, error } = useQuery(ME)
   if (loading) return (<Text>Cargando...</Text>);
   if (error) console.log(error)
-  if (data) console.log(data)
   
   return <View style={styles.container}>
       <ScrollView horizontal style={styles.scroller}>
@@ -45,6 +44,7 @@ const AppBar = () => {
          <Pressable style={styles.tab} onPressOut={() => {authstorage.removeAccessToken(); client.resetStore(); navigate('/')}}>
            <Text color='nav' fontSize='heading'>Sign Out</Text>
           </Pressable> 
+          <AppTab text='My reviews' link='/reviews' />
           <AppTab text='Create review' link='/review' />
           </View>
           : 

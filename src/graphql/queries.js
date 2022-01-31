@@ -66,10 +66,23 @@ export const GET_REPO = gql`
 `
 
 export const ME = gql`
-    query Me {
+    query Me($includeRevs : Boolean = false) {
         me {
             id
             username
+            reviews @include(if: $includeRevs) {
+                edges {
+                    node {
+                        id
+                        text
+                        rating
+                        createdAt
+                        repository {
+                            name
+                        }
+                    }
+                }
+            }
         }
     }
 `

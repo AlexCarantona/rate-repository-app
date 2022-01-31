@@ -24,7 +24,7 @@ const MicroData = ({number, label}) => {
     )
 };
 
-const ReviewItem = ({ item }) => {
+export const ReviewItem = ({ item }) => {
 
     const styles = StyleSheet.create({
         reviewContainer: {
@@ -55,7 +55,7 @@ const ReviewItem = ({ item }) => {
     <View style={styles.reviewContainer} fullWidth> 
         <View style={styles.rating}><Text fontSize='subheading' fontWeight='bold' color='primary'>{item.rating}</Text></View>
         <View style={styles.reviewInfo} >
-            <Text fontSize='subheading' fontWeight='bold'>{item.user.username}</Text>
+            <Text fontSize='subheading' fontWeight='bold'>{item.user?.username || item.repository.name}</Text>
             <Text>{format(new Date(item.createdAt), 'y.M.d')}</Text>
             <Text>{item.text}</Text>
         </View>
